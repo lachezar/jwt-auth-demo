@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Generate JWT</title>
+
+    <style>
+      textarea {
+        display: block;
+        margin: 0 auto;
+        width: 50vw;
+        height: 20vw;
+      }
+    </style>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/7.14.4/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.14.4/firebase-auth.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+  </head>
+  <body>
+    <textarea readonly></textarea>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then((result) => {
+          result.user.getIdToken().then((jwt) => {
+            const textarea = document.querySelector('textarea');
+            textarea.textContent = `curl -v -H 'Authorization: Bearer ${jwt}' `;
+            textarea.focus();
+            textarea.select();
+          }).catch((error) => {
+            console.error(error);
+          });
+        }).catch((error) => {
+          console.error(error);
+        });
+      });
+    </script>
+  </body>
+</html>
